@@ -1,0 +1,15 @@
+[package]
+name = "animation"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+palette = {version = "0.5.0", features = ["named", "named_from_str"]}
+itertools-num = "0.1.3"
+itertools = "0.10.3"
+
+[dependencies.nannou]
+git = "https://github.com/nannou-org/nannou.git"
+branch = "publish-nannou-0.18.1"
