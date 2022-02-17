@@ -38,7 +38,7 @@ pub fn bezier<'a>(points: &'a [Point3]) -> impl FnOnce(f32) -> Point3 + 'a {
     }
 }
 
-pub fn partial_bezier_points(points: &Vec<Point3>, a: f32, b: f32) -> Vec<Point3> {
+pub fn partial_bezier_points(points: &[Point3], a: f32, b: f32) -> Vec<Point3> {
     if a == 1. {
         vec![points.last().unwrap().clone(); points.len()]
     } else {
