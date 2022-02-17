@@ -1,7 +1,6 @@
 use itertools_num::linspace;
-use nannou::prelude::Point3;
 
-use super::mobject::Mobject;
+use super::{constants, integer_interpolate, mobject::Mobject, Point3};
 
 const N_POINTS_PER_CUBIC_CURVE: usize = 4;
 
@@ -10,7 +9,7 @@ pub trait VMobject: Mobject {
         let last_point = self.get_last_point().unwrap().clone();
         let mut l = linspace(0., 1., N_POINTS_PER_CUBIC_CURVE)
             .skip(1)
-            .map(|i| last_point.lerp(*point, i))
+            .map(|i| last_point.lerp(point, i))
             .take(3);
         self.add_cubic_bezier_curve_to(&l.next().unwrap(), &l.next().unwrap(), &l.next().unwrap());
     }
@@ -22,7 +21,7 @@ pub trait VMobject: Mobject {
     }
     fn add_cubic_bezier_curve_to(&mut self, handle1: &Point3, handle2: &Point3, anchor: &Point3) {
         let new_points = [
-            &self.get_last_point().cloned().unwrap_or(Point3::ZERO),
+            &self.get_last_point().cloned().unwrap_or(constants::ZERO),
             handle1,
             handle2,
             anchor,
@@ -50,5 +49,39 @@ pub trait VMobject: Mobject {
     }
     fn get_start_anchors(&self) -> Vec<&Point3> {
         self.points().iter().step_by(4).collect()
+    }
+
+    #[inline]
+    fn get_cubic_bezier_tuples_from_points(points: &Vec<Point3>) -> Vec<&[Point3]> {
+        points.chunks(4).collect()
+    }
+    fn get_cubic_bezier_tuples(&self) -> Vec<&[Point3]> {
+        Self::get_cubic_bezier_tuples_from_points(self.points())
+    }
+
+    fn clear_points(&mut self) {
+        *self.points_mut() = vec![constants::ZERO];
+    }
+
+    fn pointwise_become_partial(&mut self, vmobject: impl VMobject, a: f32, b: f32) -> &mut Self {
+        if a <= 0. && b >= 1. {
+            *self.points_mut() = vmobject.points().clone();
+            return self;
+        }
+
+        let bezier_quads = vmobject.get_cubic_bezier_tuples();
+        let num_cubics = bezier_quads.len() as f32;
+
+        let (lower_index, lower_residule) = integer_interpolate(0., num_cubics, a);
+        let (upper_index, upper_residule) = integer_interpolate(0., num_cubics, b);
+
+        self.clear_points();
+
+        if num_cubics == 0. {
+            return self;
+        }
+
+        if lower_index == upper_index {}
+        self
     }
 }
