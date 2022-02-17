@@ -1,6 +1,13 @@
-mod constants;
+mod animation;
+pub mod bezier;
+pub mod constants;
 pub mod geometry;
 pub mod mobject;
-mod vectorized_mobject;
+pub mod simple_functions;
+mod types;
+pub mod vectorized_mobject;
 
+pub use bezier::*;
 pub use constants::*;
+pub use simple_functions::*;
+pub use types::*;

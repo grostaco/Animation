@@ -50,6 +50,7 @@ version = "0.1.0"
 dependencies = [
  "itertools",
  "itertools-num",
+ "lazy_static",
  "nannou",
  "palette",
 ]
