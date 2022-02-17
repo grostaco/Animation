@@ -1,8 +1,10 @@
-mod animation;
+pub mod animation;
 pub mod bezier;
 pub mod constants;
+pub mod creation;
 pub mod geometry;
 pub mod mobject;
+pub mod rate_functions;
 pub mod simple_functions;
 mod types;
 pub mod vectorized_mobject;

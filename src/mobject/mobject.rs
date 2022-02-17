@@ -1,6 +1,6 @@
 use std::{cmp::Ordering, ops::IndexMut};
 
-use super::{constants, Point3};
+use super::{constants, integer_interpolate, partial_bezier_points, Point3};
 use itertools::{Itertools, MinMaxResult};
 
 pub trait Mobject: Clone {
@@ -144,5 +144,56 @@ pub trait Mobject: Clone {
             }
         }
         result
+    }
+
+    fn clear_points(&mut self) {
+        self.points_mut().clear()
+    }
+
+    #[inline]
+    fn get_cubic_bezier_tuples_from_points(points: &Vec<Point3>) -> Vec<&[Point3]> {
+        points.chunks(4).collect()
+    }
+    fn get_cubic_bezier_tuples(&self) -> Vec<&[Point3]> {
+        Self::get_cubic_bezier_tuples_from_points(self.points())
+    }
+
+    fn pointwise_become_partial(&mut self, vmobject: impl Mobject, a: f32, b: f32) -> &mut Self {
+        if a <= 0. && b >= 1. {
+            *self.points_mut() = vmobject.points().clone();
+            return self;
+        }
+
+        let bezier_quads = vmobject.get_cubic_bezier_tuples();
+        let num_cubics = bezier_quads.len() as f32;
+
+        let (lower_index, lower_residue) = integer_interpolate(0., num_cubics, a);
+        let (upper_index, upper_residue) = integer_interpolate(0., num_cubics, b);
+
+        self.clear_points();
+
+        if num_cubics == 0. {
+            return self;
+        }
+
+        if lower_index == upper_index {
+            self.points_mut()
+                .extend(bezier_quads[lower_index as usize].iter());
+        } else {
+            self.points_mut().extend(partial_bezier_points(
+                bezier_quads[lower_index as usize],
+                lower_residue,
+                1.,
+            ));
+            for quad in bezier_quads[lower_index as usize + 1..upper_index as usize].iter() {
+                self.points_mut().extend(quad.iter());
+            }
+            self.points_mut().extend(partial_bezier_points(
+                bezier_quads[upper_index as usize],
+                0.,
+                upper_residue,
+            ));
+        }
+        self
     }
 }

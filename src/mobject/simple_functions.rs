@@ -36,6 +36,10 @@ pub fn choose(n: u64, r: u64, use_cache: bool) -> u64 {
     numerator / denominator
 }
 
+pub fn sigmoid(x: f32) -> f32 {
+    1.0 / (1. + (-x).exp())
+}
+
 #[cfg(test)]
 mod tests {
     use super::choose;
