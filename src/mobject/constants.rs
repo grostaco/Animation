@@ -1,24 +1,12 @@
-use nannou::prelude::{Point3, Vec3};
+use super::Vec3;
 
-/*
-pub const ORIGIN: Point3 = Vec3::ZERO;
-pub const UP: Point3 = Vec3::Y;
-pub const DOWN: Point3 = ORIGIN - Vec3::Y;
-pub const LEFT: Point3 = Vec3::X;
-pub const RIGHT: Point3 = -Vec3::X;
+pub const ZERO: Vec3 = Vec3(0., 0., 0.);
+pub const UP: Vec3 = Vec3(0., 1., 0.);
+pub const DOWN: Vec3 = Vec3(0., -1., 0.);
+pub const LEFT: Vec3 = Vec3(-1., 0., 0.);
+pub const RIGHT: Vec3 = Vec3(1., 0., 0.);
 
-pub const UL: Point3 = UP + LEFT;
-pub const UR: Point3 = UP + RIGHT;
-pub const DL: Point3 = DOWN + LEFT;
-pub const DR: Point3 = DOWN + RIGHT;
-
-pub const UP: Point3 = Point3::new(0., 1., 0.);
-pub const DOWN: Point3 = Point3::new(0., -1., 0.);
-pub const LEFT: Point3 = Point3::new(1., 0., 0.);
-pub const RIGHT: Point3 = Point3::new(-1., 0., 0.);
-
-pub const UL: Point3 = UP + LEFT;
-pub const UR: Point3 = UP + RIGHT;
-pub const DL: Point3 = DOWN + LEFT;
-pub const DR: Point3 = DOWN + RIGHT;
- */
+pub const UL: Vec3 = Vec3(-1., 1., 0.);
+pub const UR: Vec3 = Vec3(1., 1., 0.);
+pub const DL: Vec3 = Vec3(-1., -1., 0.);
+pub const DR: Vec3 = Vec3(1., -1., 0.);

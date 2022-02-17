@@ -1,10 +1,10 @@
-use nannou::prelude::Point3;
-use palette::{named, Srgb};
+use super::{constants::*, types::Point3};
+//use palette::named;
 
-use super::{constants::*, mobject::Mobject, vectorized_mobject::VMobject};
+use super::{mobject::Mobject, vectorized_mobject::VMobject};
 
 pub struct Rectangle {
-    color: Srgb<u8>,
+    //color: Srgb<u8>,
     points: Vec<Point3>,
 }
 
@@ -19,20 +19,6 @@ trait Polygram: VMobject {
 trait Polygon: Polygram {}
 
 impl Mobject for Rectangle {
-    fn new() -> Self {
-        let mut rect = Self {
-            color: named::from_str("olive").unwrap(),
-            points: Vec::new(),
-        };
-        rect.add_vertices(&[
-            Point3::new(1., 1., 0.),
-            Point3::new(-1., 1., 0.),
-            Point3::new(-1., -1., 0.),
-            Point3::new(1., -1., 0.),
-        ]);
-
-        rect
-    }
     fn points(&self) -> &Vec<Point3> {
         &self.points
     }
@@ -44,3 +30,17 @@ impl Mobject for Rectangle {
 
 impl VMobject for Rectangle {}
 impl Polygram for Rectangle {}
+
+impl Rectangle {
+    pub fn new(width: f32, height: f32) -> Self {
+        let mut rect = Self {
+            //color: named::from_str("olive").unwrap(),
+            points: Vec::new(),
+        };
+        rect.add_vertices(&[UR, UL, DL, DR]);
+        rect.stretch_to_fit_width(width);
+        rect.stretch_to_fit_height(height);
+
+        rect
+    }
+}
