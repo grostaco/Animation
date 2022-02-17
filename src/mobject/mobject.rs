@@ -3,7 +3,7 @@ use std::{cmp::Ordering, ops::IndexMut};
 use super::{constants, Point3};
 use itertools::{Itertools, MinMaxResult};
 
-pub trait Mobject {
+pub trait Mobject: Clone {
     fn points(&self) -> &Vec<Point3>;
     fn points_mut(&mut self) -> &mut Vec<Point3>;
 
@@ -31,13 +31,14 @@ pub trait Mobject {
         scale_factor: f32,
         about_point: Option<Point3>,
         about_edge: Option<Point3>,
-    ) {
+    ) -> &mut Self {
         let func = |points: &mut Vec<Point3>| {
             for point in points {
                 *point *= scale_factor;
             }
         };
-        self.apply_points_function_about_point(func, about_point, about_edge)
+        self.apply_points_function_about_point(func, about_point, about_edge);
+        self
     }
 
     fn reduce_across_dim<F, FO, G, GO>(

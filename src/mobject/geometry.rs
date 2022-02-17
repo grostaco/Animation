@@ -3,6 +3,7 @@ use super::{constants::*, types::Point3};
 
 use super::{mobject::Mobject, vectorized_mobject::VMobject};
 
+#[derive(Clone)]
 pub struct Rectangle {
     //color: Srgb<u8>,
     points: Vec<Point3>,
